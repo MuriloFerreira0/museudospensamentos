@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Museu dos Pensamentos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a0a2e 0%, #2d1a47 100%);
+            color: #f8f0fb;
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(240, 180, 230, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(180, 220, 255, 0.08) 0%, transparent 20%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M20,50 Q40,30 60,50 T100,50" fill="none" stroke="%234a2a6b" stroke-width="0.3" opacity="0.5"/></svg>');
+            opacity: 0.3;
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            border-bottom: 1px solid rgba(255, 215, 255, 0.2);
+        }
+        
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 1.2rem;
+            position: relative;
+            display: inline-block;
+            background: linear-gradient(to right, #ffd6ff, #e7c6ff, #c8b6ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(200, 182, 255, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            max-width: 700px;
+            margin: 0 auto 1.5rem;
+            font-weight: 300;
+            opacity: 0.9;
+            line-height: 1.8;
+            color: #e7c6ff;
+        }
+        
+        .gallery-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .gallery-counter {
+            font-size: 1.2rem;
+            background: rgba(45, 26, 71, 0.5);
+            padding: 0.7rem 1.3rem;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 215, 255, 0.2);
+            color: #ffd6ff;
+        }
+        
+        .heart-divider {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+        
+        .heart-divider i {
+            color: #ff70a6;
+            font-size: 2rem;
+            margin: 0 1rem;
+            opacity: 0.6;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.6; }
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 3rem;
+            padding: 2rem 0;
+        }
+        
+        .thought-frame {
+            background: linear-gradient(145deg, rgba(74, 42, 107, 0.7), rgba(45, 26, 71, 0.8));
+            border: 1px solid rgba(255, 215, 255, 0.2);
+            border-radius: 12px;
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.5s ease;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .thought-frame::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top left, rgba(255, 214, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .thought-frame:hover {
+            transform: translateY(-10px) scale(1.03);
+            border-color: rgba(255, 215, 255, 0.5);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(145deg, rgba(84, 52, 117, 0.8), rgba(55, 36, 81, 0.9));
+        }
+        
+        .thought-id {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 1rem;
+            opacity: 0.6;
+            color: #e7c6ff;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+        }
+        
+        .thought-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.1rem;
+            margin-bottom: 1.8rem;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            line-height: 1.4;
+            font-weight: 600;
+            color: #ffd6ff;
+            text-shadow: 0 0 10px rgba(255, 214, 255, 0.2);
+        }
+        
+        .heart-icon {
+            display: flex;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+        
+        .heart-icon i {
+            color: #ff70a6;
+            font-size: 1.8rem;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+        
+        .thought-frame:hover .heart-icon i {
+            transform: scale(1.3);
+            opacity: 1;
+            color: #ff4d94;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 4rem 0 3rem;
+            font-size: 1.1rem;
+            opacity: 0.7;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 215, 255, 0.1);
+            color: #e7c6ff;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+        
+        .floating-text {
+            position: absolute;
+            font-size: 1rem;
+            opacity: 0.15;
+            z-index: -1;
+            animation: float 25s infinite linear;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #ffd6ff;
+        }
+        
+        .floating-heart {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.1;
+            z-index: -1;
+            animation: floatHearts 20s infinite linear;
+            color: #ff70a6;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.1; }
+            50% { opacity: 0.2; }
+            100% { transform: translateY(-100vh) translateX(20vw) rotate(10deg); opacity: 0.1; }
+        }
+        
+        @keyframes floatHearts {
+            0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.1; }
+            50% { opacity: 0.3; transform: scale(1.2); }
+            100% { transform: translateY(-100vh) translateX(-20vw) rotate(-15deg); opacity: 0.1; }
+        }
+        
+        .love-quote {
+            text-align: center;
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 2rem;
+            border-radius: 15px;
+            background: rgba(45, 26, 71, 0.5);
+            border: 1px solid rgba(255, 215, 255, 0.2);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 500;
+            line-height: 1.8;
+            color: #ffd6ff;
+            position: relative;
+        }
+        
+        /* CORREÇÃO APLICADA AQUI */
+        .love-quote::before {
+            content: "“";
+            font-size: 8rem;
+            position: absolute;
+            color: rgba(255, 112, 166, 0.2);
+            font-family: 'Playfair Display', serif;
+            top: -2rem;
+            left: 1rem;
+            line-height: 1;
+        }
+        
+        .love-quote::after {
+            content: "”";
+            font-size: 8rem;
+            position: absolute;
+            color: rgba(255, 112, 166, 0.2);
+            font-family: 'Playfair Display', serif;
+            bottom: -3rem;
+            right: 1rem;
+            line-height: 0.1;
+        }
+        
+        @media (max-width: 1100px) {
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 2.5rem;
+            }
+            
+            h1 {
+                font-size: 4rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 3.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .gallery {
+                grid-template-columns: 1fr;
+                gap: 2.2rem;
+            }
+            
+            .thought-title {
+                font-size: 1.9rem;
+            }
+            
+            .love-quote {
+                font-size: 1.5rem;
+                padding: 1.5rem;
+            }
+            
+            .love-quote::before, 
+            .love-quote::after {
+                font-size: 5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.7rem;
+            }
+            
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .thought-frame {
+                padding: 2rem 1.5rem;
+                min-height: 270px;
+            }
+            
+            .thought-title {
+                font-size: 1.8rem;
+            }
+            
+            .love-quote {
+                font-size: 1.3rem;
+            }
+            
+            .love-quote::before, 
+            .love-quote::after {
+                font-size: 4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating elements -->
+    <div class="floating-text" style="top: 5%; left: 3%;">Amor</div>
+    <div class="floating-text" style="top: 15%; right: 10%;">Paixão</div>
+    <div class="floating-text" style="top: 25%; left: 15%;">Saudade</div>
+    <div class="floating-text" style="top: 40%; right: 8%;">Carinho</div>
+    <div class="floating-text" style="top: 55%; left: 10%;">Memória</div>
+    <div class="floating-text" style="top: 70%; right: 12%;">Doçura</div>
+    <div class="floating-text" style="top: 85%; left: 7%;">Intimidade</div>
+    
+    <div class="floating-heart" style="top: 8%; right: 5%;"><i class="fas fa-heart"></i></div>
+    <div class="floating-heart" style="top: 22%; left: 8%;"><i class="fas fa-heart"></i></div>
+    <div class="floating-heart" style="top: 35%; right: 15%;"><i class="fas fa-heart"></i></div>
+    <div class="floating-heart" style="top: 50%; left: 12%;"><i class="fas fa-heart"></i></div>
+    <div class="floating-heart" style="top: 65%; right: 8%;"><i class="fas fa-heart"></i></div>
+    <div class="floating-heart" style="top: 80%; left: 5%;"><i class="fas fa-heart"></i></div>
+    <div class="floating-heart" style="top: 95%; right: 10%;"><i class="fas fa-heart"></i></div>
+    
+    <div class="container">
+        <header>
+            <h1>Museu dos Pensamentos</h1>
+            <p class="subtitle">Uma galeria eterna dos momentos que vivemos, cada pensamento uma obra-prima de amor, cada memória uma sala neste museu do coração.</p>
+        </header>
+        
+        <div class="gallery-info">
+            <div class="gallery-counter">20 quadros de amor</div>
+        </div>
+        
+        <div class="gallery">
+            <!-- Quadro 1 -->
+            <div class="thought-frame">
+                <div class="thought-id">#001</div>
+                <h2 class="thought-title">Quando ela sorriu com a boca cheia de lanche</h2>
+                <div class="heart-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+            
+            <!-- Quadro 2 -->
+            <div class="thought-frame">
+                <div class="thought-id">#002</div>
+                <h2 class="thought-title">Quando ela dormiu no meu peito</h2>
+                <div class="heart-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+            
+            <!-- Quadro 3 -->
+            <div class="thought-frame">
+                <div class="thought-id">#003</div>
+                <h2 class="thought-title">Quando ela me olhou e parecia enxergar minha alma inteira</h2>
+                <div class="heart-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+            
+            <!-- Quadro 4 -->
+            <div class="thought-frame">
+                <div class="thought-id">#004</div>
+                <h2 class="thought-title">Quando ela riu de uma piada minha que nem era tão engraçada</h2>
+                <div class="heart-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+            
+            <!-- Quadro 5 -->
+            <div class="thought-frame">
+                <div class="thought-id">#005</div>
+                <h2 class="thought-title">Quando ela pegou na minha mão como quem segura o mundo</h2>
+                <div class="heart-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+            
+            <!-- Quadro 6 -->
+            <div class="thought-frame">
+                <div class="thought-id">#006</div>
+                <h2 class="thought-title">Quando ela reclamou do frio e eu quis virar coberta</h2>
+                <div class="heart-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+            
+            <!-- Quadro 7 -->
+            <div class="thought-frame">
+                <div class="thought-id">#007</div>
+                <h2 class="thought-title">Quando ela me chamou de amor e eu me tornei um novo alguém</h2>
+                <div class="heart-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+            
+            <!-- Quadro 8 -->
+            <div class="thought-frame">
+                <div class="thought-id">#008</div>
+                <h2 class="thought-title">Quando ela encostou a testa na minha e tudo ficou em silêncio</h2>
+                <div class="heart-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+            
+            <!-- Quadro 9 -->
+            <div class="thought-frame">
+                <div class="thought-id">#009</div>
+                <h2 class="thought-title">Quando ela mexia no cabelo sem perceber e eu admirava em segredo</h2>
+                <div class="heart-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+            
+            <!-- Quadro 10 -->
+            <div class="thought-frame">
+                <div class="thought-id">#010</div>
+                <h2 class="thought-title">Quando ela pediu pra eu estar com ela e eu entendi o quanto era importante</h2>
+                <div class="heart-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+            
+            <!-- Quadro 11 -->
+            <div class="thought-frame">
+                <div class="thought-id">#011</div>
+                <h2 class="thought-title">Quando ela me contou um trauma e eu quis voltar no tempo pra proteger</h2>
+                <div class="heart-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+            
+            <!-- Quadro 12 -->
+            <div class="thought-frame">
+                <div class="thought-id">#012</div>
+                <h2 class="thought-title">Quando ela ficou olhando pro céu e eu só olhava pra ela</h2>
+                <div class="heart-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+            
+            <!-- Quadro 13 -->
+            <div class="thought-frame">
+                <div class="thought-id">#013</div>
+                <h2 class="thought-title">Quando ela me abraçou e eu senti que era onde eu deveria estar</h2>
+                <div class="heart-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+            
+            <!-- Quadro 14 -->
+            <div class="thought-frame">
+                <div class="thought-id">#014</div>
+                <h2 class="thought-title">Quando ela chorou e eu chorei com ela, por ela</h2>
+                <div class="heart-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+            
+            <!-- Quadro 15 -->
+            <div class="thought-frame">
+                <div class="thought-id">#015</div>
+                <h2 class="thought-title">Quando ela foi embora e deixou perfume no meu travesseiro</h2>
+                <div class="heart-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+            
+            <!-- Quadro 16 -->
+            <div class="thought-frame">
+                <div class="thought-id">#016</div>
+                <h2 class="thought-title">Quando ela falou do futuro e meu nome estava lá</h2>
+                <div class="heart-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+            
+            <!-- Quadro 17 -->
+            <div class="thought-frame">
+                <div class="thought-id">#017</div>
+                <h2 class="thought-title">Quando ela riu sem motivo e eu ri só porque era ela</h2>
+                <div class="heart-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+            
+            <!-- Quadro 18 -->
+            <div class="thought-frame">
+                <div class="thought-id">#018</div>
+                <h2 class="thought-title">Quando ela me fez carinho no cabelo e tudo pareceu certo</h2>
+                <div class="heart-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+            
+            <!-- Quadro 19 -->
+            <div class="thought-frame">
+                <div class="thought-id">#019</div>
+                <h2 class="thought-title">Quando ela ficou doente e eu quis arrancar a dor com as mãos</h2>
+                <div class="heart-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+            
+            <!-- Quadro 20 -->
+            <div class="thought-frame">
+                <div class="thought-id">#020</div>
+                <h2 class="thought-title">Quando ela olhou pro lado e eu pensei: é com ela que eu quero tudo</h2>
+                <div class="heart-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="heart-divider">
+            <i class="fas fa-heart"></i>
+            <i class="fas fa-heart"></i>
+            <i class="fas fa-heart"></i>
+        </div>
+        
+        <div class="love-quote">
+            O amor não se vê com os olhos, mas com o coração. E neste museu, cada pensamento é uma prova de que o coração tem memória própria, guardando cada detalhe, cada sorriso, cada olhar que transformou simples momentos em eternidade.
+        </div>
+    </div>
+    
+    <footer>
+        <p>Museu dos Pensamentos &copy; 2025 - Cada batida do coração é uma nova obra neste museu de amor</p>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create additional floating text
+            const emotions = ["Paixão", "Ternura", "Carinho", "Felicidade", "Nostalgia", 
+                            "Doçura", "Cumplicidade", "Admiração", "Proteção", "Conexão", 
+                            "Intimidade", "Dedicação", "Vulnerabilidade", "Entrega", "Companheirismo"];
+            
+            emotions.forEach((emotion, index) => {
+                const text = document.createElement('div');
+                text.className = 'floating-text';
+                text.textContent = emotion;
+                text.style.left = `${5 + (index * 7) % 85}%`;
+                text.style.top = `${10 + (index * 12) % 80}%`;
+                text.style.animationDuration = `${18 + Math.random() * 25}s`;
+                text.style.animationDelay = `${Math.random() * 5}s`;
+                document.body.appendChild(text);
+            });
+            
+            // Create additional floating hearts
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.innerHTML = '<i class="fas fa-heart"></i>';
+                heart.style.left = `${5 + (i * 8) % 85}%`;
+                heart.style.top = `${15 + (i * 15) % 85}%`;
+                heart.style.animationDuration = `${15 + Math.random() * 20}s`;
+                heart.style.animationDelay = `${Math.random() * 5}s`;
+                heart.style.fontSize = `${1 + Math.random() * 1.5}rem`;
+                document.body.appendChild(heart);
+            }
+            
+            // Add interaction to frames
+            const thoughtFrames = document.querySelectorAll('.thought-frame');
+            
+            thoughtFrames.forEach(frame => {
+                frame.addEventListener('click', function() {
+                    // Create a heart effect
+                    const heart = document.createElement('div');
+                    heart.innerHTML = '<i class="fas fa-heart"></i>';
+                    heart.style.position = 'absolute';
+                    heart.style.color = '#ff70a6';
+                    heart.style.fontSize = '2rem';
+                    heart.style.opacity = '0.8';
+                    heart.style.zIndex = '10';
+                    heart.style.pointerEvents = 'none';
+                    
+                    // Random position within the frame
+                    const rect = frame.getBoundingClientRect();
+                    const x = Math.random() * rect.width;
+                    const y = Math.random() * rect.height;
+                    
+                    heart.style.left = `${x}px`;
+                    heart.style.top = `${y}px`;
+                    
+                    frame.appendChild(heart);
+                    
+                    // Animate the heart
+                    heart.animate([
+                        { transform: 'scale(0.5)', opacity: 0.8 },
+                        { transform: 'scale(1.5)', opacity: 0 }
+                    ], {
+                        duration: 800,
+                        easing: 'ease-out'
+                    });
+                    
+                    // Remove after animation
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 800);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
